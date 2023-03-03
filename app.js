@@ -13,7 +13,7 @@ var corsOptions = {
 app.get('/', cors(corsOptions), (req, res) => {
   var url = "https://api.poets.org/api/poem-a-day";
 
-  request(url, (error, res, html) => {
+  request(url, (error, response, html) => {
     if (!error) {
       console.log(html);
       res.json(html);
