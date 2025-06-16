@@ -40,8 +40,11 @@ app.get('/poem-a-day', async (req, res) => {
 
     if (cachedHtml && !forceRefresh) {
       // Scrape the page to check for updates
-      const browser = await chromium.launch({ headless: true });
-      const page = await browser.newPage();
+      // If no cache, scrape the website
+      const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36";
+      const browser = await chromium.launch({ headless: true, chromiumSandbox: false });
+      const context = await browser.newContext({ userAgent, bypassCSP: true });
+      const page = await context.newPage();
       await page.goto('https://poets.org/poem-a-day', { waitUntil: 'networkidle' });
       const html = await page.content();
       await browser.close();
@@ -63,8 +66,11 @@ app.get('/poem-a-day', async (req, res) => {
       }
     } else {
       // No cache or forced refresh: scrape and cache
-      const browser = await chromium.launch({ headless: true });
-      const page = await browser.newPage();
+      // If no cache, scrape the website
+      const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36";
+      const browser = await chromium.launch({ headless: true, chromiumSandbox: false });
+      const context = await browser.newContext({ userAgent, bypassCSP: true });
+      const page = await context.newPage();
       await page.goto('https://poets.org/poem-a-day', { waitUntil: 'networkidle' });
       const html = await page.content();
       await browser.close();
